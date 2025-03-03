@@ -1,0 +1,23 @@
+#!/bin/sh
+
+TMP_OUTPUT="/tmp/screenshot.png"
+DEST_DIR="$HOME/Pictures"
+
+rm "$TMP_OUTPUT"
+
+mode="${1:-screen}"
+case "$mode" in
+	"select") scrot "$TMP_OUTPUT" --select --line mode=edge || exit ;;
+	"window") scrot "$TMP_OUTPUT" --focused --border || exit ;;
+	"screen") scrot "$TMP_OUTPUT" || exit ;;
+esac
+
+filename="$(dmenu -p 'Save screenshot as:')"
+status="$?"
+if [ -n "$filename" ] && [ -d "$DEST_DIR" ]; then
+    mv "$TMP_OUTPUT" "${DEST_DIR}/${filename}.png"
+elif [ "$status" -eq 0 ]; then
+    xclip -selection clipboard -t image/png < "$TMP_OUTPUT"
+fi
+
+# vim:ts=4:sts=4:sw=4:et:

@@ -1,0 +1,3 @@
+! `cpp` is needed for `#include` to work
+#include ".Xresources.d/themes/tokyonight"
+#include ".Xresources.d/xterm"

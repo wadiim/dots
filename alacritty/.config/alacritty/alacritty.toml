@@ -1,0 +1,80 @@
+[colors.bright]
+black   = "#414868"
+blue    = "#7AA2F7"
+cyan    = "#7DCFFF"
+green   = "#9ECE6A"
+magenta = "#BB9AF7"
+red     = "#F7768E"
+white   = "#A9B1D6"
+yellow  = "#E0AF68"
+
+[colors.normal]
+black   = "#15161E"
+blue    = "#7AA2F7"
+cyan    = "#7DCFFF"
+green   = "#9ECE6A"
+magenta = "#BB9AF7"
+red     = "#F7768E"
+white   = "#A9B1D6"
+yellow  = "#E0AF68"
+
+[colors.primary]
+background = "#1A1B26"
+foreground = "#C0CAF5"
+
+[env]
+TERM = "xterm-256color"
+
+[font]
+builtin_box_drawing = true
+size = 9.0
+
+[font.bold]
+family = "Iosevka Nerd Font"
+style = "Bold"
+
+[font.bold_italic]
+family = "Iosevka Nerd Font"
+style = "Bold Italic"
+
+[font.glyph_offset]
+x = 0
+y = 0
+
+[font.italic]
+family = "Iosevka Nerd Font"
+style = "Italic"
+
+[font.normal]
+family = "Iosevka Nerd Font"
+style = "Regular"
+
+[font.offset]
+x = 1
+y = 0
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[window]
+decorations = "full"
+dynamic_title = true
+startup_mode = "Windowed"
+title = "Alacritty"
+
+[window.class]
+general = "Alacritty"
+instance = "Alacritty"
+
+[window.dimensions]
+columns = 0
+lines = 0
+
+[window.padding]
+x = 4
+y = 4
+
+[window.position]
+x = 0
+y = 0

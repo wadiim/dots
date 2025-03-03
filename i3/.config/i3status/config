@@ -1,0 +1,62 @@
+general {
+	output_format = "i3bar"
+	colors = false
+	interval = 5
+}
+
+order += "cpu_usage"
+order += "memory"
+order += "disk /"
+order += "wireless _first_"
+order += "volume master"
+order += "battery all"
+order += "tztime local_time"
+order += "tztime local_date"
+
+cpu_usage {
+	format = "  %cpu0 %cpu1 %cpu2 %cpu3"
+}
+
+memory {
+	#format = "󰍛  %used"
+    format = "  %used"
+}
+
+disk "/" {
+	format = "  %avail"
+}
+
+ethernet _first_ {
+	format_up = "󰈀 %speed"
+	format_down = "󰈂"
+}
+
+wireless _first_ {
+	format_up = "󰖩 %quality"
+	format_down = "󰖪"
+}
+
+volume master {
+	format = "󰕾  %volume"
+	format_muted = "󰖁"
+	device = "default"
+	mixer = "Master"
+	mixer_idx = 0
+}
+
+battery all {
+	format = "%status %percentage %remaining"
+	format_down = "󱉝"
+	status_chr = "󰂄"
+	status_bat = "󰁹"
+	status_unk = "󰂑"
+	status_full = "󰂄"
+}
+
+tztime local_time {
+    format = "  %H:%M:%S"
+}
+
+tztime local_date {
+    format = "  %d-%m-%Y"
+}

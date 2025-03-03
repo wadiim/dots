@@ -1,0 +1,7 @@
+--vimgrep
+--no-heading
+--hidden
+--glob=!.git
+--glob=!node_modules
+--glob=!package-lock.json
+--glob=!tags

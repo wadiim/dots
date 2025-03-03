@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# A file preview handler for lf.
+# Args:
+# 	$1 - file name
+# 	$2 - width
+# 	$3 - height
+# 	$4 - horizontal position
+# 	$5 - vertical position
+
+CACHE="$HOME/.cache/lf/thumbnail.$(stat --printf '%n\0%i\0%F\0%s\0%W\0%Y' \
+    -- "$(readlink -f "$1")" | sha256sum | awk '{print $1}'))"
+
+image() {
+    if [ -n "$DISPLAY" ] && [ -z "$WAYLAND_DISPLAY" ] && [ -z "$VIMRUNTIME" ]; then
+        printf '{"action": "add", "identifier": "PREVIEW", "x": "%s", "y": "%s", "width": "%s", "height": "%s", "scaler": "contain", "path": "%s"}\n' "$4" "$5" "$(($2-1))" "$(($3-1))" "$1" > "$FIFO_UEBERZUG"
+        exit 1
+    fi
+}
+
+case "$(file -Lb --mime-type -- "$1")" in
+    image/svg*)
+        if [ ! -f "${CACHE}.jpg" ]; then
+            magick "$1" "$CACHE".jpg
+        fi
+        image "${CACHE}.jpg" "$2" "$3" "$4" "$5"
+        ;;
+    image/*)
+        image "$1" "$2" "$3" "$4" "$5"
+        ;;
+    text/troff)
+        MANWIDTH="$2" man ./ "$1" | col -b
+        ;;
+    text/* | */xml | application/javascript | application/json)
+        bat --style="${BAT_STYLE:-numbers}" --color=always --pager=never --terminal-width="$(($2-2))" --wrap=never "$1"
+        ;;
+    */pdf)
+        if [ ! -f "${CACHE}.jpg" ]; then
+            pdftoppm -jpeg -f 1 -singlefile "$1" "$CACHE"
+        fi
+        image "${CACHE}.jpg" "$2" "$3" "$4" "$5"
+        ;;
+    *)
+        cat "$1"
+        ;;
+esac
+
+exit 0
+
+# vim:ts=4:sts=4:sw=4:et:

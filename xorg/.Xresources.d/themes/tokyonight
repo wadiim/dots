@@ -1,0 +1,42 @@
+#define fgcolor       #C0CAF5
+#define bgcolor       #1A1B26
+
+#define dark_black    #15161E
+#define light_black   #414868
+#define dark_red      #F7768E
+#define light_red     #F7768E
+#define dark_green    #9ECE6A
+#define light_green   #9ECE6A
+#define dark_yellow   #E0AF68
+#define light_yellow  #E0AF68
+#define dark_blue     #7AA2F7
+#define light_blue    #7AA2F7
+#define dark_magenta  #BB9AF7
+#define light_magenta #BB9AF7
+#define dark_cyan     #7DCFFF
+#define light_cyan    #7DCFFF
+#define dark_white    #A9B1D6
+#define light_white   #A9B1D6
+
+*foreground:          fgcolor
+*background:          bgcolor
+*cursorColor:         light_white
+
+*color0:              dark_black
+*color1:              dark_red
+*color2:              dark_green
+*color3:              dark_yellow
+*color4:              dark_blue
+*color5:              dark_magenta
+*color6:              dark_cyan
+*color7:              dark_white
+*color8:              light_black
+*color9:              light_red
+*color10:             light_green
+*color11:             light_yellow
+*color12:             light_blue
+*color13:             light_magenta
+*color14:             light_cyan
+*color15:             light_white
+
+! vim: syntax=xdefaults:ts=2:sts=2:sw=2:et:
