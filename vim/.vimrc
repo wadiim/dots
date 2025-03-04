@@ -80,6 +80,7 @@ hi qfLineNr      ctermfg=Grey                    cterm=bold
 hi Folded                       ctermbg=DarkGrey
 
 hi Character    ctermfg=Green
+hi Comment      ctermfg=DarkGrey ctermbg=NONE    cterm=italic
 hi Constant     ctermfg=Yellow
 hi Identifier   ctermfg=Blue
 hi Include      ctermfg=Cyan
