@@ -7,6 +7,7 @@ set scrolloff 10
 set drawbox true
 set ignorecase true
 set cursorpreviewfmt "\033[7m"
+set promptfmt "\033[36;1m%u\033[1;90m@\033[1;35m%h\033[0m:\033[1;90m%d\033[0m\033[1m%f\033[0m"
 
 set cleaner '~/.config/lf/cleaner'
 set previewer '~/.config/lf/previewer'
