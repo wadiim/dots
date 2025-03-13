@@ -33,6 +33,12 @@ cmd open &{{
                 lf -remote "send toggle"
             done &
             ;;
+        audio/*)
+            lf -remote "send $id \$mpv \$fx"
+            ;;
+        video/*)
+            mpv $fx
+            ;;
     esac
 }}
 
