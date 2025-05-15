@@ -39,6 +39,11 @@ cmd open &{{
         video/*)
             mpv $fx
             ;;
+        application/vnd.openxmlformats-officedocument.* |\
+        application/vnd.oasis.opendocument.* |\
+        application/vnd.ms-*)
+            setsid -f libreoffice $fx > /dev/null 2>&1
+            ;;
     esac
 }}
 
