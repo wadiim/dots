@@ -1,5 +1,6 @@
-# Add directory containing user-specific command binaries to PATH
+# Add some directories to PATH
 export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:$HOME/go/bin"
 
 # Set the default tools
 export EDITOR=vim
