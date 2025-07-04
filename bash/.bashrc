@@ -1,7 +1,9 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-PS1='\[\e[1;36m\]\u\[\e[1;90m\]@\[\e[1;35m\]\h \[\e[1;90m\]\W \$\[\e[m\] '
+# Set the prompt. It starts with the FTCS_PROMPT sequence (`\e]133;A\e\\`)
+# which allows tmux to move between shell prompts.
+PS1='\e]133;A\e\\\[\e[1;36m\]\u\[\e[1;90m\]@\[\e[1;35m\]\h \[\e[1;90m\]\W \$\[\e[m\] '
 
 alias ls='ls --color=auto'
 alias ip='ip --color=auto'

@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+start_delim='(^|/|\<|")'
+relative_path='(\.|\.\.)'
+start_path="($relative_path|[[:alnum:]~_\"-]*)"
+component='[[:alnum:]_.#$%&+=@"-]' # File or directory name
+intermediate_paths="(/$component+)"
+line_no='(:[0-9]+)' # Line or character index
+file_end="($component+$line_no?$line_no?)"
+end="([/\"]|\.$file_end|$file_end)"
+
+loc="$start_delim$start_path(${intermediate_paths}+$end|${intermediate_paths}{2,}$end?|$relative_path/$file_end)"
+
+# Returns the ID of the tmux pane that the script is executed in.
+get_tmux_curr_pane_id() {
+    tmux display-message -p "#{pane_id}"
+}
+
+# Enters the copy mode in the current tmux pane.
+enter_tmux_copy_mode() {
+    tmux copy-mode
+}
+
+# Moves the cursor to the beginning of the previous prompt. It assumes that
+# the shell emits prompts that starts with the FTCS_PROMPT sequence and
+# that the current tmux pane is in copy mode.
+jump_to_previous_prompt() {
+    tmux send-keys -X previous-prompt
+}
+
+select_file_locations() {
+    tmux send-keys -X search-forward "$loc"
+}
+
+enter_tmux_copy_mode
+jump_to_previous_prompt
+select_file_locations

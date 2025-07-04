@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+declare -a filenames
+declare -a line_idxs
+declare -a char_idxs
+
+declare -r editor="${EDITOR:-vi}"
+
+# Exits with 0 status if the script is executed inside tmux, 1 otherwise.
+is_tmux_running() {
+    [[ -v TMUX ]]
+}
+
+# Returns the ID of the tmux window that the script is executed in.
+get_tmux_curr_window_id() {
+    tmux display-message -p "#{window_id}"
+}
+
+# Returns the ID of the pane in the current window in which the editor is
+# being run, or an empty string if there is no such a pane. In case the
+# editor is run in multiple panes, the ID of only the first one is returned
+# (based on the pane's position inside the window, not the ID value).
+get_editor_tmux_pane_id() {
+    curr_window_id="$( get_tmux_curr_window_id )"
+    echo "$( tmux list-panes -a -f "\
+"'#{&&:'"\
+"'#{==:#{window_id},'"$curr_window_id"'},'"\
+"'#{==:#{pane_current_command},'"$editor"'}'"\
+"'}'"\
+" -F '#{pane_id}' | head -n 1 )"
+}
+
+# Move focus to the pane with the given ID.
+tmux_select_pane() {
+    tmux select-pane -t "$1" -Z
+}
+
+# Exit copy mode in the pane with the given ID.
+tmux_exit_copy_mode() {
+    tmux send-keys -t "$1" -X cancel 2>/dev/null
+}
+
+# Send keys to a pane.
+# Usage: tmux_send_keys pane_id key...
+tmux_send_keys() {
+    tmux send-keys -t "$@"
+}
+
+# Split the current window horizontally and run the given command in a new
+# pane.
+tmux_split_window() {
+    tmux split-window -bhPF '#{pane_id}' "$@"
+}
+
+for arg in "$@"; do
+    IFS=':' read -ra loc <<< "$arg"
+    filenames+=("${loc[0]}")
+    line_idxs+=("${loc[1]:-1}")
+    char_idxs+=("${loc[2]:-1}")
+done
+
+if (( ${#filenames[@]} <= 0 )); then
+    exit 0
+fi
+
+row="${line_idxs[0]}"
+col="${char_idxs[0]}"
+if is_tmux_running; then
+    pane_id="$( get_editor_tmux_pane_id )"
+    if [[ -z $pane_id ]]; then
+        # There is no editor instance in any of the current window's panes.
+        tmux_split_window "$editor" \
+            "${filenames[@]}" +"${row}" -c "norm ${col}|" >/dev/null
+    else
+        [[ "$editor" == *vi* ]] && cmd="drop" || cmd="open"
+        tmux_exit_copy_mode "$pane_id"
+        tmux_send_keys "$pane_id" "C-c" "C-c"
+        tmux_send_keys "$pane_id" ":$cmd " \
+            "${filenames[@]} | norm ${row}G${col}|" "Enter"
+        tmux_select_pane "$pane_id"
+    fi
+else
+    $editor "${filenames[@]}" +"${row}" -c "norm ${col}|"
+fi
