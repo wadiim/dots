@@ -47,6 +47,38 @@ cmd open &{{
     esac
 }}
 
+cmd fzf_jump ${{
+    res="$(
+        find . -type d \
+            ! -path '*.m2*' \
+            ! -path '*.git*' \
+            ! -path '*.gradle*' \
+            ! -path '*cache*' \
+            ! -path '*tmp*' \
+            ! -path '*node_modules*' \
+            ! -path '*env*' \
+            ! -path '*target*' \
+            ! -path '*/.mozilla/*' \
+            ! -path '*/.cargo/registry/*' \
+            ! -path '*/go/pkg/mod/*' \
+            ! -path '*/.rustup/toolchains/*' \
+        -print 2>/dev/null | fzf --reverse \
+    )"
+    if [ -n "$res" ]; then
+        if [ -d "$res" ]; then
+            cmd="cd"
+        else
+            cmd="select"
+        fi
+        res="$(printf '%s' "$res" | sed 's/\\/\\\\/g;s/"/\\"/g')"
+        lf -remote "send $id $cmd \"$res\""
+    fi
+}}
+map f :{{
+    fzf_jump
+    push :<esc>
+}}
+
 map <esc> quit
 
 map d push $mkdir<space>
