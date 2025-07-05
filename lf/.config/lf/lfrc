@@ -14,7 +14,7 @@ set previewer '~/.config/lf/previewer'
 
 cmd open &{{
     case $(file --mime-type -Lb $f) in
-        text/* | application/javascript | application/json)
+        text/* | application/javascript | application/json | inode/x-empty)
             lf -remote "send $id \$$EDITOR \$fx"
             ;;
         application/pdf | application/epub*)
