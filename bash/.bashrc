@@ -18,8 +18,12 @@ fi
 shopt -s histappend
 export HISTCONTROL=erasedups:ignoredups:ignorespace
 
-# Use the `lfub` wrapper for `lf`
-alias lf='lfub'
+# Use the `lfub` and `lfcd` wrappers for `lf`
+lfcd() {
+    type lfub &>/dev/null && cmd="lfub" || cmd="lf"
+    cd "$(command "$cmd" -print-last-dir "$@")"
+}
+alias lf='lfcd'
 
 # Configure fzf
 if type fzf &> /dev/null; then
