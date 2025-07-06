@@ -92,7 +92,6 @@ map Q quit
 map q quit_restore
 map <esc> quit_restore
 
-map d push $mkdir<space>
 map D delete
 map r set reverse!
 map R rename
