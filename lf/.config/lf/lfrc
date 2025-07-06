@@ -12,6 +12,12 @@ set promptfmt "\033[36;1m%u\033[1;90m@\033[1;35m%h\033[0m:\033[1;90m%d\033[0m\03
 set cleaner '~/.config/lf/cleaner'
 set previewer '~/.config/lf/previewer'
 
+# Warn about nested instances.
+&{{
+    [ -v VIM ] && [ "$LF_LEVEL" -le 2 ] || [ "$LF_LEVEL" -eq 1 ] || \
+        lf -remote "send $id echoerr \"Warning: Nested lf instance\""
+}}
+
 cmd open &{{
     case $(file --mime-type -Lb $f) in
         text/* | application/javascript | application/json | inode/x-empty)
