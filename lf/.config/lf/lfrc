@@ -56,18 +56,18 @@ cmd open &{{
 cmd fzf_jump ${{
     res="$(
         find . -type d \
-            ! -path '*.m2*' \
             ! -path '*.git*' \
-            ! -path '*.gradle*' \
-            ! -path '*cache*' \
-            ! -path '*tmp*' \
-            ! -path '*node_modules*' \
-            ! -path '*env*' \
-            ! -path '*target*' \
+            ! -path '*.m2*' \
             ! -path '*/.mozilla/*' \
-            ! -path '*/.cargo/registry/*' \
+            ! -path '*/cargo/registry/*' \
             ! -path '*/go/pkg/mod/*' \
-            ! -path '*/.rustup/toolchains/*' \
+            ! -path '*/rustup/toolchains/*' \
+            ! -path '*cache*' \
+            ! -path '*env*' \
+            ! -path '*gradle*' \
+            ! -path '*node_modules*' \
+            ! -path '*target*' \
+            ! -path '*tmp*' \
         -print 2>/dev/null | fzf --reverse \
     )"
     if [ -n "$res" ]; then
