@@ -23,6 +23,7 @@ lfcd() {
     type lfub &>/dev/null && cmd="lfub" || cmd="lf"
     cd "$(command "$cmd" -print-last-dir "$@")"
 }
+export -f lfcd
 alias lf='lfcd'
 
 # Configure fzf

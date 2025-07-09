@@ -115,7 +115,12 @@ endif
 " Lf {{{
 function! Lf(path)
     let temp = tempname()
-    exec 'silent !lf -selection-path='
+    let l:cmd = 'lf'
+    silent! let l:status = system('command -v lfcd')
+    if l:status =~ '\w\+'
+        let l:cmd = 'lfcd'
+    endif
+    exec 'silent !' . l:cmd . ' -selection-path='
         \ . shellescape(temp)
         \ . ' '
         \ . expand(a:path)
