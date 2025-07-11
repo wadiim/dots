@@ -33,13 +33,6 @@ nnoremap [q :cprev<CR>
 nnoremap ]q :cnext<CR>
 nnoremap [b :bprevious<CR>
 nnoremap ]b :bnext<CR>
-
-nnoremap <leader>e :Lf .<CR>
-nnoremap <leader>E :Lf %:p:h<CR>
-nnoremap <leader>ff :Files<CR>
-nnoremap <leader>fg :GFiles<CR>
-nnoremap <leader>fb :Buffers<CR>
-nnoremap <leader>fr :Rg!<CR>
 " }}}
 " Appearance {{{
 set ruler
@@ -101,12 +94,6 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 let g:plug_window = 'enew'
-
-call plug#begin()
-
-Plug 'junegunn/fzf.vim'
-
-call plug#end()
 " }}}
 " Ripgrep {{{
 if executable("rg")
@@ -115,76 +102,96 @@ if executable("rg")
 endif
 " }}}
 " Lf {{{
-function! Lf(path)
-    let temp = tempname()
-    let l:cmd = 'lf'
-    silent! let l:status = system('command -v lfcd')
-    if l:status =~ '\w\+'
-        let l:cmd = 'lfcd'
-    endif
-    exec 'silent !' . l:cmd . ' -selection-path='
-        \ . shellescape(temp)
-        \ . ' '
-        \ . expand(a:path)
-    if !filereadable(temp)
-        redraw!
-        return
-    endif
-    let names = readfile(temp)
-    if empty(names)
-        redraw!
-        return
-    endif
-    exec 'edit ' . fnameescape(names[0])
-    for name in names[1:]
-        exec 'argadd ' . fnameescape(name)
-    endfor
-    redraw!
-endfunction
+if executable("lf")
+    nnoremap <leader>e :Lf .<CR>
+    nnoremap <leader>E :Lf %:p:h<CR>
 
-command! -nargs=? -complete=dir Lf call Lf(<q-args>)
+    function! Lf(path)
+        let temp = tempname()
+        let l:cmd = 'lf'
+        silent! let l:status = system('command -v lfcd')
+        if l:status =~ '\w\+'
+            let l:cmd = 'lfcd'
+        endif
+        exec 'silent !' . l:cmd . ' -selection-path='
+            \ . shellescape(temp)
+            \ . ' '
+            \ . expand(a:path)
+        if !filereadable(temp)
+            redraw!
+            return
+        endif
+        let names = readfile(temp)
+        if empty(names)
+            redraw!
+            return
+        endif
+        exec 'edit ' . fnameescape(names[0])
+        for name in names[1:]
+            exec 'argadd ' . fnameescape(name)
+        endfor
+        redraw!
+    endfunction
 
-augroup ReplaceNetrwByLf
-    au VimEnter * silent! autocmd! FileExplorer
-    au BufEnter * let s:buf_path = expand("%")
-        \| if isdirectory(s:buf_path)
-            \| bdelete!
-            \| call timer_start(100, {->Lf(s:buf_path)})
-        \| endif
-augroup END
+    command! -nargs=? -complete=dir Lf call Lf(<q-args>)
+
+    augroup ReplaceNetrwByLf
+        au VimEnter * silent! autocmd! FileExplorer
+        au BufEnter * let s:buf_path = expand("%")
+            \| if isdirectory(s:buf_path)
+                \| bdelete!
+                \| call timer_start(100, {->Lf(s:buf_path)})
+            \| endif
+    augroup END
+endif
 " }}}
 " Fzf {{{
-let g:fzf_vim = {}
-let g:fzf_vim.preview_window = []
-let g:fzf_layout = { 'down': '30%' }
+if executable("fzf")
+    nnoremap <leader>ff :Files<CR>
+    nnoremap <leader>fg :GFiles<CR>
+    nnoremap <leader>fb :Buffers<CR>
+    nnoremap <leader>fr :Rg!<CR>
 
-function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg '
-	\ . '--column '
-	\ . '--line-number '
-	\ . '--no-heading '
-	\ . '--color=always '
-	\ . '--smart-case '
-	\ . '-- %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
-  let reload_command = printf(command_fmt, '{q}')
-  let spec = {
-    \ 'options': [
-        \ '--phony',
-        \ '--query', a:query,
-        \ '--bind',
-        \ 'change:reload:' . reload_command,
-    \ ]
-  \ }
-  call fzf#vim#grep(
-      \ initial_command,
-      \ 1,
-      \ fzf#vim#with_preview(spec, 'right'),
-      \ a:fullscreen
-  \ )
-endfunction
+    call plug#begin()
 
-command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
+    Plug 'junegunn/fzf.vim'
+
+    call plug#end()
+
+    let g:fzf_vim = {}
+    let g:fzf_vim.preview_window = []
+    let g:fzf_layout = { 'down': '30%' }
+
+    if executable("rg")
+        function! RipgrepFzf(query, fullscreen)
+          let command_fmt = 'rg '
+            \ . '--column '
+            \ . '--line-number '
+            \ . '--no-heading '
+            \ . '--color=always '
+            \ . '--smart-case '
+            \ . '-- %s || true'
+          let initial_command = printf(command_fmt, shellescape(a:query))
+          let reload_command = printf(command_fmt, '{q}')
+          let spec = {
+            \ 'options': [
+                \ '--phony',
+                \ '--query', a:query,
+                \ '--bind',
+                \ 'change:reload:' . reload_command,
+            \ ]
+          \ }
+          call fzf#vim#grep(
+              \ initial_command,
+              \ 1,
+              \ fzf#vim#with_preview(spec, 'right'),
+              \ a:fullscreen
+          \ )
+        endfunction
+
+        command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
+    endif
+endif
 " }}}
 
 " vim:ts=4:sts=4:sw=4:et:fdm=marker:fdls=0
