@@ -100,6 +100,8 @@ if empty(glob('~/.vim/autoload/plug.vim'))
     autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
+let g:plug_window = 'enew'
+
 call plug#begin()
 
 Plug 'junegunn/fzf.vim'
