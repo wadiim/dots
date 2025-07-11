@@ -36,6 +36,8 @@ export PATH="$PATH:$GOPATH/bin"
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
 # Autostart X server at login
-[[ -z "$DISPLAY" && "$XDG_VTNR" -eq 1 ]] && exec startx
+if type startx &>/dev/null && [[ -z "$DISPLAY" && "$XDG_VTNR" -eq 1 ]]; then
+    exec startx
+fi
 
 # vim:ts=4:sts=4:sw=4:et:
