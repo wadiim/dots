@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 
-start_delim='(^|/|\<|")'
+start_delim='(^|[[:space:]"])'
 relative_path='(\.|\.\.)'
-start_path="($relative_path|[[:alnum:]~_\"-]*)"
-component='[[:alnum:]_.#$%&+=@"-]' # File or directory name
+start_path="($relative_path|~|/|[[:alnum:]_-]*)?"
+component='[[:alnum:]_.#$%&+=@-]'
 intermediate_paths="(/$component+)"
-line_no='(:[0-9]+)' # Line or character index
+line_no='(:[0-9]+)'
 file_end="($component+$line_no?$line_no?)"
-end="([/\"]|\.$file_end|$file_end)"
+end="(\"|\.$file_end|$component+$line_no$line_no?)"
 
-loc="$start_delim$start_path(${intermediate_paths}+$end|${intermediate_paths}{2,}$end?|$relative_path/$file_end)"
+loc="$start_delim($start_path(\
+${intermediate_paths}+$end\
+|${intermediate_paths}{2,}$end?\
+|$relative_path/$file_end\
+|\.$component+${intermediate_paths}+$end\
+)|~${intermediate_paths})"
 
 # Returns the ID of the tmux pane that the script is executed in.
 get_tmux_curr_pane_id() {
@@ -28,9 +33,16 @@ jump_to_previous_prompt() {
     tmux send-keys -X previous-prompt
 }
 
+# Selects file locations between the current position and the end of the
+# buffer.
 select_file_locations() {
     tmux send-keys -X search-forward "$loc"
 }
+
+if [[ "$1" == "-p" ]]; then
+    echo "$loc"
+    exit 0
+fi
 
 enter_tmux_copy_mode
 jump_to_previous_prompt
