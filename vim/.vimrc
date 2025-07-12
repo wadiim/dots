@@ -109,9 +109,9 @@ if executable("lf")
     function! Lf(path)
         let temp = tempname()
         let l:cmd = 'lf'
-        silent! let l:status = system('command -v lfcd')
+        silent! let l:status = system('command -v lfub')
         if l:status =~ '\w\+'
-            let l:cmd = 'lfcd'
+            let l:cmd = 'lfub'
         endif
         exec 'silent !' . l:cmd . ' -selection-path='
             \ . shellescape(temp)
