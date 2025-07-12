@@ -16,6 +16,11 @@ get_tmux_curr_window_id() {
     tmux display-message -p "#{window_id}"
 }
 
+# Returns the working directory of the current tmux pane.
+get_tmux_cwd() {
+    tmux display-message -p "#{pane_current_path}"
+}
+
 # Returns the ID of the pane in the current window in which the editor is
 # being run, or an empty string if there is no such a pane. In case the
 # editor is run in multiple panes, the ID of only the first one is returned
@@ -49,7 +54,7 @@ tmux_send_keys() {
 # Split the current window horizontally and run the given command in a new
 # pane.
 tmux_split_window() {
-    tmux split-window -bhPF '#{pane_id}' "$@"
+    tmux split-window -bhPF '#{pane_id}' -c "$( get_tmux_cwd )" "$@"
 }
 
 for arg in "$@"; do
@@ -75,6 +80,7 @@ if is_tmux_running; then
         [[ "$editor" == *vi* ]] && cmd="drop" || cmd="open"
         tmux_exit_copy_mode "$pane_id"
         tmux_send_keys "$pane_id" "C-c" "C-c"
+        tmux_send_keys "$pane_id" ":cd $( get_tmux_cwd )" "Enter"
         tmux_send_keys "$pane_id" ":$cmd " \
             "${filenames[@]} | norm ${row}G${col}|" "Enter"
         tmux_select_pane "$pane_id"
