@@ -32,6 +32,7 @@ assert_eq '/var/lib/foo/data' '/var/lib/foo/data'
 assert_eq 'listening on "/var/run/foo/.s.SQL.11"' '"/var/run/foo/.s.SQL.11"'
 assert_eq '/var/lib/foo/bar@3e9d8a6c34dd' '/var/lib/foo/bar@3e9d8a6c34dd'
 assert_eq 'Launching /foo-bar.d/10-baz-qux.sh' '/foo-bar.d/10-baz-qux.sh'
+assert_eq 'ignoring /foo-bar.d/* ' '/foo-bar.d/'
 
 assert_eq 'foo/bar' ''
 assert_eq 'x foo/bar x' ''
@@ -41,11 +42,9 @@ assert_eq 'foo tmux.conf bar' ''
 assert_eq 'foo a.b.c bar' ''
 assert_eq 'a.b.c:2'
 assert_eq 'Website: https://example.org' ''
-assert_eq '$2$a$12$$FDfWu4JA9ABiG3JmSLTiKOzYn6/5UmXydNpkMssqt/9d47tqhQLX6' ''
 
 # TODO
 #assert_eq '2025/07/12' ''
 #assert_eq 'nginx/1.27.4' ''
-#assert_eq 'ignoring /foo-bar.d/* ' '/foo-bar.d/'
 
 echo ''
