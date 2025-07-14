@@ -33,17 +33,25 @@ jump_to_previous_prompt() {
     tmux send-keys -X previous-prompt
 }
 
-# Selects file locations between the current position and the end of the
-# buffer.
-select_file_locations() {
+# Selects file paths between the current position and the end of the buffer,
+# starting from the first one.
+select_paths() {
     tmux send-keys -X search-forward "$loc"
 }
 
-if [[ "$1" == "-p" ]]; then
-    echo "$loc"
-    exit 0
-fi
+# Selects file paths between the current position and the beginning of the
+# buffer, starting from the last one.
+select_paths_backward() {
+    tmux send-keys -X search-backward "$loc"
+}
 
-enter_tmux_copy_mode
-jump_to_previous_prompt
-select_file_locations
+if (( "${#@}" < 1 )); then
+    enter_tmux_copy_mode
+    jump_to_previous_prompt
+    select_paths
+elif [[ "$1" == "-r" ]]; then
+    enter_tmux_copy_mode
+    select_paths_backward
+elif [[ "$1" == "-p" ]]; then
+    echo "$loc"
+fi
