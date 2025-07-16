@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-declare -a filenames
+declare -a filepaths
 declare -a line_idxs
 declare -a char_idxs
 
@@ -57,16 +57,62 @@ tmux_split_window() {
     tmux split-window -bhPF '#{pane_id}' -c "$( get_tmux_cwd )" "$@"
 }
 
+# Returns subdirectories of the current directory.
+get_subdirs() {
+    find "$( get_tmux_cwd )" -maxdepth 1 -type d -regex '..+' -printf '%f\n'
+}
+
+# Returns the given path with it's prefix (`/`, `./`, `../`, `~/`) removed.
+remove_path_prefix() {
+    [[ $1 =~ (\.?\.?~?/)?(.*) ]] && printf '%s\n' "${BASH_REMATCH[2]}"
+}
+
+# Exits with 0 status if the given path is absolute, 1 otherwise.
+is_path_absolute() {
+    [[ "$1" =~ ^[[:space:]]*[/|~] ]] && return 0
+    return 1
+}
+
+# Exits with 0 status if the given path points to an existing location, 1
+# otherwise.
+is_path_valid() {
+    if is_path_absolute "$1"; then
+        [[ -e "$1" ]]
+        return
+    fi
+
+    local cwd="$( get_tmux_cwd )"
+    local path="$( remove_path_prefix $1 )"
+    [[ -e "$cwd/$path" ]]
+    return
+}
+
 for arg in "$@"; do
     IFS=':' read -ra loc <<< "$arg"
-    filenames+=("${loc[0]}")
+    filepaths+=("${loc[0]}")
     line_idxs+=("${loc[1]:-1}")
     char_idxs+=("${loc[2]:-1}")
 done
 
-if (( ${#filenames[@]} <= 0 )); then
+if (( ${#filepaths[@]} <= 0 )); then
     exit 0
 fi
+
+# Prefix relative paths originating in a subdirectory with the name of that
+# directory.
+for (( i=0; i < "${#filepaths[@]}"; i+=1 )); do
+    if is_path_valid "${filepaths[$i]}"; then
+        continue
+    fi
+
+    path="$( remove_path_prefix ${filepaths[$i]} )"
+    for subdir in $( get_subdirs ); do
+        if is_path_valid "$subdir/$path"; then
+            filepaths["$i"]="$subdir/$path"
+            break
+        fi
+    done
+done
 
 row="${line_idxs[0]}"
 col="${char_idxs[0]}"
@@ -75,16 +121,16 @@ if is_tmux_running; then
     if [[ -z $pane_id ]]; then
         # There is no editor instance in any of the current window's panes.
         tmux_split_window "$editor" \
-            "${filenames[@]}" +"${row}" -c "norm ${col}|" >/dev/null
+            "${filepaths[@]}" +"${row}" -c "norm ${col}|" >/dev/null
     else
         [[ "$editor" == *vi* ]] && cmd="drop" || cmd="open"
         tmux_exit_copy_mode "$pane_id"
         tmux_send_keys "$pane_id" "C-c" "C-c"
         tmux_send_keys "$pane_id" ":cd $( get_tmux_cwd )" "Enter"
         tmux_send_keys "$pane_id" ":$cmd " \
-            "${filenames[@]} | norm ${row}G${col}|" "Enter"
+            "${filepaths[@]} | norm ${row}G${col}|" "Enter"
         tmux_select_pane "$pane_id"
     fi
 else
-    $editor "${filenames[@]}" +"${row}" -c "norm ${col}|"
+    $editor "${filepaths[@]}" +"${row}" -c "norm ${col}|"
 fi
