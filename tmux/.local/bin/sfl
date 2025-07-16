@@ -8,9 +8,9 @@ line_no='(:[0-9]+)'
 loc="($line_no$line_no?)"
 path_end='($|[[:space:]"/])'
 
-prefixed_path="($path_prefix(/$fd_name)+($path_end|$loc)?)"
-non_prefixed_abs_path="((/$fd_name)+($path_end|$loc)?)"
-non_prefixed_lc_rel_path="($fd_name(/$fd_name)+$loc)"
+prefixed_path="($path_prefix(/$fd_name)+$loc?$path_end?)"
+non_prefixed_abs_path="((/$fd_name)+$loc?$path_end?)"
+non_prefixed_lc_rel_path="($fd_name(/$fd_name)+$loc$path_end?)"
 non_prefixed_non_lc_rel_path_with_ext="($fd_name(/$fd_name)+$ext$path_end)"
 non_prefixed_non_lc_rel_path_without_ext="($fd_name(/$fd_name){2,}$path_end)"
 
