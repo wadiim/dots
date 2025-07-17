@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-loc="$( sfl -p )"
+loc="$( sfp -p )"
 
 assert_eq() {
     input="$1"
