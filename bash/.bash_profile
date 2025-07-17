@@ -37,7 +37,7 @@ export PATH="$PATH:$GOPATH/bin"
 
 # Autostart X server at login
 if type startx &>/dev/null && [[ -z "$DISPLAY" && "$XDG_VTNR" -eq 1 ]]; then
-    exec startx
+    exec startx -- -keeptty &>"$XDG_DATA_HOME/xorg/Xorg-session.log"
 fi
 
 # vim:ts=4:sts=4:sw=4:et:
