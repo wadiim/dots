@@ -28,7 +28,7 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 fi
 
 # Disable screen blanking on idle
-setterm -blank 0 -powersafe off -powerdown 0 &
+setterm -blank 0 -powersave off -powerdown 0 &
 xset s off &
 
 # Set wallpaper
