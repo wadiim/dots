@@ -82,8 +82,12 @@ is_path_valid() {
     fi
 
     local cwd="$( get_tmux_cwd )"
-    local path="$( remove_path_prefix $1 )"
-    [[ -e "$cwd/$path" ]]
+    if [[ "$1" == ../* ]]; then
+        [[ -e "$cwd/$1" ]]
+    else
+        local path="$( remove_path_prefix $1 )"
+        [[ -e "$cwd/$path" ]]
+    fi
     return
 }
 
@@ -98,14 +102,19 @@ if (( ${#filepaths[@]} <= 0 )); then
     exit 0
 fi
 
-# Prefix relative paths originating in a subdirectory with the name of that
-# directory.
+# Modify relative paths originating in a subdirectory so that they start with
+# the current directory.
 for (( i=0; i < "${#filepaths[@]}"; i+=1 )); do
     if is_path_valid "${filepaths[$i]}"; then
         continue
     fi
 
     path="$( remove_path_prefix ${filepaths[$i]} )"
+    if is_path_valid "$path"; then
+        filepaths["$i"]="$path"
+        continue
+    fi
+
     for subdir in $( get_subdirs ); do
         if is_path_valid "$subdir/$path"; then
             filepaths["$i"]="$subdir/$path"
