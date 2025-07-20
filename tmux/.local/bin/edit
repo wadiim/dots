@@ -137,9 +137,9 @@ if is_tmux_running; then
         tmux_send_keys "$pane_id" "C-c" "C-c"
         tmux_send_keys "$pane_id" ":cd $( get_tmux_cwd )" "Enter"
         tmux_send_keys "$pane_id" ":$cmd " \
-            "${filepaths[@]} | norm ${row}G${col}|" "Enter"
+            "${filepaths[@]} | norm ${row}G0${col}l1h" "Enter"
         tmux_select_pane "$pane_id"
     fi
 else
-    $editor "${filepaths[@]}" +"${row}" -c "norm ${col}|"
+    $editor "${filepaths[@]}" +"${row}" -c "norm 0${col}l1h"
 fi
