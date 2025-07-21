@@ -44,9 +44,9 @@ assert_eq 'foo tmux.conf bar' ''
 assert_eq 'foo a.b.c bar' ''
 assert_eq 'a.b.c:2'
 assert_eq 'Website: https://example.org' ''
+assert_eq '2025/07/12' ''
 
 # TODO
-#assert_eq '2025/07/12' ''
 #assert_eq 'nginx/1.27.4' ''
 
 echo ''
