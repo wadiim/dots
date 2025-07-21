@@ -150,7 +150,6 @@ if executable("fzf")
     nnoremap <leader>ff :Files<CR>
     nnoremap <leader>fg :GFiles<CR>
     nnoremap <leader>fb :Buffers<CR>
-    nnoremap <leader>fr :Rg!<CR>
 
     call plug#begin()
 
@@ -163,33 +162,22 @@ if executable("fzf")
     let g:fzf_layout = { 'down': '30%' }
 
     if executable("rg")
-        function! RipgrepFzf(query, fullscreen)
-          let command_fmt = 'rg '
+        nnoremap <leader>fr :RG!<CR>
+
+        let command = 'rg '
             \ . '--column '
             \ . '--line-number '
             \ . '--no-heading '
             \ . '--color=always '
             \ . '--smart-case '
-            \ . '-- %s || true'
-          let initial_command = printf(command_fmt, shellescape(a:query))
-          let reload_command = printf(command_fmt, '{q}')
-          let spec = {
-            \ 'options': [
-                \ '--phony',
-                \ '--query', a:query,
-                \ '--bind',
-                \ 'change:reload:' . reload_command,
-            \ ]
-          \ }
-          call fzf#vim#grep(
-              \ initial_command,
-              \ 1,
-              \ fzf#vim#with_preview(spec, 'right'),
-              \ a:fullscreen
-          \ )
-        endfunction
+            \ . '-- '
 
-        command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
+        command! -bang -nargs=* RG call fzf#vim#grep2(
+            \ command,
+            \ <q-args>,
+            \ fzf#vim#with_preview('right'),
+            \ <bang>0
+        \ )
     endif
 endif
 " }}}
