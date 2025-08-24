@@ -5,6 +5,7 @@ general {
 }
 
 order += "cpu_usage"
+order += "cpu_temperature 0"
 order += "memory"
 order += "disk /"
 order += "wireless _first_"
@@ -15,6 +16,10 @@ order += "tztime local_date"
 
 cpu_usage {
 	format = "  %cpu0 %cpu1 %cpu2 %cpu3"
+}
+
+cpu_temperature 0 {
+    format = " %degrees °C"
 }
 
 memory {
