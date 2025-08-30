@@ -1,3 +1,4 @@
 ! `cpp` is needed for `#include` to work
+! REQUIRES: gcc
 #include ".Xresources.d/themes/tokyonight"
 #include ".Xresources.d/xterm"

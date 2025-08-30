@@ -1,7 +1,10 @@
+# REQUIRES: i3-wm
+
 # Set the modifier key
 set $mod Mod4
 
 # Set the font used for window titles
+# REQUIRES: ttf-iosevka-nerd
 font pango:Iosevka Nerd Font 10
 
 for_window [class=".*"] title_format " %title"
@@ -39,6 +42,7 @@ bindsym $mod+Return exec i3-sensible-terminal
 
 # Start i3-dmenu-desktop (a dmenu wrapper which displays only applications
 # shipping a .desktop file).
+# REQUIRES: dmenu
 bindsym $mod+d exec --no-startup-id i3-dmenu-desktop \
     --dmenu="dmenu -i -nf $dark_white -nb $bgcolor -sb $light_blue -sf $dark_black"
 
@@ -176,7 +180,9 @@ client.background       $bgcolor
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
+    # REQUIRES: i3status
     status_command i3status
+    # REQUIRES: ttf-iosevka-nerd
     font pango:Iosevka Nerd Font 10
     separator_symbol " | "
     padding 1px 6px 1px 0px

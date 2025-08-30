@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# REQUIRES: bash, tmux
+
 common_chars='_#$%&+=@-'
 
 start_delim='(^|[[:space:]"])'

@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 
+# REQUIRES: bash
+
 loc="$( sfp -p )"
 
 assert_eq() {
     input="$1"
     expected="$2"
+    # REQUIRES: grep
     actual="$( echo $input | grep -oP $loc )"
 
+    # REQUIRES: sed
     if [ "$(echo $actual | sed 's/^\s*//; s/\s*$//')" = "$expected" ]; then
         echo -ne "\e[30;32m.\e[0m"
     else

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# REQUIRES: bash, tmux
+
 declare -a filepaths
 declare -a line_idxs
 declare -a char_idxs
@@ -58,6 +60,7 @@ tmux_split_window() {
 }
 
 # Returns subdirectories of the current directory.
+# REQUIRES: findutils
 get_subdirs() {
     find "$( get_tmux_cwd )" -maxdepth 1 -type d -regex '..+' -printf '%f\n'
 }

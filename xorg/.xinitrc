@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# REQUIRES: xorg, xorg-xinit
+
 userresources=$HOME/.Xresources
 usermodmap=$HOME/.Xmodmap
 sysresources=/etc/X11/xinit/.Xresources
@@ -28,6 +30,7 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 fi
 
 # Disable screen blanking on idle
+# REQUIRES: util-linux
 setterm -blank 0 -powersave off -powerdown 0 &
 xset s off &
 
@@ -38,7 +41,9 @@ setbg &
 setxkbmap pl &
 
 # Run a hotkey deamon
+# REQUIRES: sxhkd
 sxhkd &
 
 # Start a window manager
+# REQUIRES: i3-wm
 exec i3

@@ -8,10 +8,12 @@
 # 	$4 - horizontal position
 # 	$5 - vertical position
 
+# REQUIRES: coreutils, gawk
 CACHE="$HOME/.cache/lf/thumbnail.$(stat --printf '%n\0%i\0%F\0%s\0%W\0%Y' \
     -- "$(readlink -f "$1")" | sha256sum | awk '{print $1}'))"
 
 image() {
+    # REQUIRES: ueberzug
     if [ -n "$DISPLAY" ] && [ -z "$WAYLAND_DISPLAY" ]; then
         printf '{"action": "add", "identifier": "PREVIEW", "x": "%s", "y": "%s", "width": "%s", "height": "%s", "scaler": "contain", "path": "%s"}\n' "$4" "$5" "$(($2-1))" "$(($3-1))" "$1" > "$FIFO_UEBERZUG"
         exit 1
@@ -21,6 +23,7 @@ image() {
 case "$(file -Lb --mime-type -- "$1")" in
     image/svg*)
         if [ ! -f "${CACHE}.jpg" ]; then
+            # REQUIRES: imagemagick
             magick "$1" "$CACHE".jpg
         fi
         image "${CACHE}.jpg" "$2" "$3" "$4" "$5"
@@ -29,18 +32,22 @@ case "$(file -Lb --mime-type -- "$1")" in
         image "$1" "$2" "$3" "$4" "$5"
         ;;
     text/troff)
+        # REQUIRES: man
         MANWIDTH="$2" man ./ "$1" | col -b
         ;;
     text/* | */xml | application/javascript | application/json)
+        # REQUIRES: bat
         bat --style="${BAT_STYLE:-numbers}" --color=always --pager=never --terminal-width="$(($2-2))" --wrap=never "$1"
         ;;
     */pdf)
         if [ ! -f "${CACHE}.jpg" ]; then
+            # REQUIRES: poppler
             pdftoppm -jpeg -f 1 -singlefile "$1" "$CACHE"
         fi
         image "${CACHE}.jpg" "$2" "$3" "$4" "$5"
         ;;
     *)
+        # REQUIRES: coreutils
         cat "$1"
         ;;
 esac

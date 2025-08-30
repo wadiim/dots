@@ -1,3 +1,7 @@
+" REQUIRES: gvim
+" NOTE: On Arch Linux, the `gvim` package, unlike `vim`, provides clipboard
+"       support.
+
 " General {{{
 set nocompatible
 

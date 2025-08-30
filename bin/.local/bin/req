@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# A dependency aggregator.
+#
+# Usage:
+#   req [starting-point...]
+#
+# It recursively collects dependencies from all files under each
+# starting-point or under current working directory if no starting-point was
+# provided. The output is a space-separated list of dependencies without
+# duplicates. The dependency specification must be a comma-separated list of
+# names, preceded by `REQUIRES: ` (note the trailing space), e.g.:
+#   REQUIRES: foo, bar, baz
+# The dependency specification does not need to be on a line on its own, but
+# every item after `REQUIRES: ` is treated as a dependency name. This means
+# that the dependency specifications can be embedded in scripts or
+# configuration files using comments.
+
+paths="."
+if (( ${#@} > 0 )); then
+    paths="$@"
+fi
+
+get_reqs_from_dir() {
+    grep -hro --exclude-dir='.git' 'REQUIRES: \(.*\)' "$dir" \
+        | cut -d" " -f 2- \
+        | sed 's/ \|, \?/\n/g'
+}
+
+for dir in $paths; do
+    for req in $( get_reqs_from_dir $dir ); do
+        echo "$req"
+    done
+done | sort | uniq | tr '\n' ' ' && echo ""
+
+# TODO: Add disabling parsing files containing specific tag.

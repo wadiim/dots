@@ -1,3 +1,5 @@
+# REQUIRES: alacritty
+
 [colors.bright]
 black   = "#414868"
 blue    = "#7AA2F7"
@@ -30,10 +32,12 @@ builtin_box_drawing = true
 size = 9.0
 
 [font.bold]
+# REQUIRES: ttf-iosevka-nerd
 family = "Iosevka Nerd Font"
 style = "Bold"
 
 [font.bold_italic]
+# REQUIRES: ttf-iosevka-nerd
 family = "Iosevka Nerd Font"
 style = "Bold Italic"
 
@@ -42,10 +46,12 @@ x = 0
 y = 0
 
 [font.italic]
+# REQUIRES: ttf-iosevka-nerd
 family = "Iosevka Nerd Font"
 style = "Italic"
 
 [font.normal]
+# REQUIRES: ttf-iosevka-nerd
 family = "Iosevka Nerd Font"
 style = "Regular"
 

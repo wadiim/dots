@@ -1,2 +1,3 @@
 --theme="ansi"
 --style="numbers"
+# REQUIRES: bat

@@ -1,3 +1,4 @@
 #!/bin/sh
 
+# REQUIRES: feh
 feh --no-fehbg --bg-scale "$HOME/Pictures/wallpaper.jpg" 

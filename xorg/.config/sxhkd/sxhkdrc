@@ -1,3 +1,5 @@
+# REQUIRES: sxhkd
+
 Print
     screenshot
 shift + Print

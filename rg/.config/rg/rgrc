@@ -5,3 +5,4 @@
 --glob=!node_modules
 --glob=!package-lock.json
 --glob=!tags
+# REQUIRES: ripgrep

@@ -1,3 +1,5 @@
+# REQUIRES: bash
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
@@ -10,7 +12,8 @@ alias ip='ip --color=auto'
 alias grep='grep --color=auto'
 alias diff='diff --color=auto'
 
-# Enable extended tab completion. Requires `bash-completion` package.
+# Enable extended tab completion.
+# REQUIRES: bash-completion
 if [[ -r /usr/share/bash-completion/bash_completion ]]; then
     . /usr/share/bash-completion/bash_completion
 fi

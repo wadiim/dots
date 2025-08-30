@@ -1,5 +1,7 @@
+# REQUIRES: lf
+
 set icons
-set shell bash
+set shell bash # REQUIRES: bash
 set shellopts '-eu'
 set ifs "\n"
 set incsearch
@@ -24,12 +26,15 @@ cmd open &{{
             lf -remote "send $id \$$EDITOR \$fx"
             ;;
         application/pdf | application/epub*)
+            # REQUIRES: util-linux, zathura
             setsid -f zathura $fx > /dev/null 2>&1
             ;;
         image/svg+xml)
+            # REQUIRES: feh
             feh $f
             ;;
         image/*)
+            # REQUIRES: grep util-linux nsxiv
             rotdir $f |
             grep -i "\.\(png\|jpg\|jpeg\|gif\|webp\|avif\|tif\|ico\)*$" |
             setsid -f nsxiv -aio 2>/dev/null |
@@ -40,20 +45,24 @@ cmd open &{{
             done &
             ;;
         audio/*)
+            # REQUIRES: mpv
             lf -remote "send $id \$mpv \$fx"
             ;;
         video/*)
+            # REQUIRES: mpv
             mpv $fx
             ;;
         application/vnd.openxmlformats-officedocument.* |\
         application/vnd.oasis.opendocument.* |\
         application/vnd.ms-*)
+            # REQUIRES: libreoffice
             setsid -f libreoffice $fx > /dev/null 2>&1
             ;;
     esac
 }}
 
 cmd fzf_jump ${{
+    # REQUIRES: findutils, fzf
     res="$(
         find . -type d \
             ! -path '*.git*' \
@@ -76,6 +85,7 @@ cmd fzf_jump ${{
         else
             cmd="select"
         fi
+        # REQUIRES: sed
         res="$(printf '%s' "$res" | sed 's/\\/\\\\/g;s/"/\\"/g')"
         lf -remote "send $id $cmd \"$res\""
     fi

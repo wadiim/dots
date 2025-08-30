@@ -1,8 +1,11 @@
 xterm*termName: xterm-256color
+
+! REQUIRES: ttf-iosevka-nerd
 xterm*faceName: Iosevka Nerd Font:charwidth=10
 xterm*faceSize: 14
 xterm*utf8: 2
 xterm*renderFont: true
+
 xterm*decTerminalID: vt340
 xterm*internalBorder: 4
 xterm*numColorRegisters: 256
