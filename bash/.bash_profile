@@ -17,6 +17,7 @@ export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 export PSQLRC="$XDG_CONFIG_HOME/pg/psqlrc"
 export SCREENRC="$XDG_CONFIG_HOME/screen/screenrc"
 export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
+export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/rg/rgrc"
 
 export HISTFILE="$XDG_STATE_HOME/bash_history"
 export LESSHISTFILE="$XDG_STATE_HOME/lesshst"
