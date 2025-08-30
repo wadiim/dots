@@ -2,11 +2,11 @@
 
 # A file preview handler for lf.
 # Args:
-# 	$1 - file name
-# 	$2 - width
-# 	$3 - height
-# 	$4 - horizontal position
-# 	$5 - vertical position
+#   $1 - file name
+#   $2 - width
+#   $3 - height
+#   $4 - horizontal position
+#   $5 - vertical position
 
 # REQUIRES: coreutils, gawk
 CACHE="$HOME/.cache/lf/thumbnail.$(stat --printf '%n\0%i\0%F\0%s\0%W\0%Y' \
