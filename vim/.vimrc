@@ -71,6 +71,12 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 let g:plug_window = 'enew'
+
+call plug#begin()
+
+Plug 'junegunn/fzf.vim'
+
+call plug#end()
 " }}}
 " Ripgrep {{{
 if executable("rg")
@@ -126,12 +132,6 @@ if executable("fzf")
     nnoremap <leader>ff :Files<CR>
     nnoremap <leader>fg :GFiles<CR>
     nnoremap <leader>fb :Buffers<CR>
-
-    call plug#begin()
-
-    Plug 'junegunn/fzf.vim'
-
-    call plug#end()
 
     let g:fzf_vim = {}
     let g:fzf_vim.preview_window = []
