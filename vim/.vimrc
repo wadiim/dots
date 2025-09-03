@@ -155,6 +155,10 @@ if executable("fzf")
             \ <bang>0
         \ )
     endif
+
+    " Hide statusline
+    autocmd! FileType fzf set laststatus=0 noshowmode noruler
+      \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 endif
 " }}}
 
