@@ -32,6 +32,7 @@ hi Error ctermfg=Red
 hi Identifier ctermfg=Blue
 hi Include ctermfg=Magenta
 hi Keyword ctermfg=Magenta
+hi PreProc ctermfg=Magenta
 hi Special ctermfg=Magenta
 hi Statement ctermfg=Magenta
 hi String ctermfg=Green
