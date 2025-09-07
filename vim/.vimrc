@@ -59,6 +59,7 @@ let &t_EI = "\e[2 q"
 colorscheme ansi
 " }}}
 " Plugins {{{
+packadd! comment
 packadd! matchit
 
 runtime ftplugin/man.vim
