@@ -24,7 +24,14 @@ case "$(file -Lb --mime-type -- "$1")" in
     image/svg*)
         if [ ! -f "${CACHE}.jpg" ]; then
             # REQUIRES: imagemagick
-            magick "$1" "$CACHE".jpg
+            magick -background "#1A1B26" "$1" "$CACHE.jpg"
+        fi
+        image "${CACHE}.jpg" "$2" "$3" "$4" "$5"
+        ;;
+    image/png*)
+        if [ ! -f "${CACHE}.jpg" ]; then
+            # REQUIRES: imagemagick
+            magick "$1" -background "#1A1B26" -alpha background "$CACHE.jpg"
         fi
         image "${CACHE}.jpg" "$2" "$3" "$4" "$5"
         ;;
