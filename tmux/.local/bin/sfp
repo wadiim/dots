@@ -42,6 +42,16 @@ get_tmux_curr_pane_id() {
     tmux display-message -p "#{pane_id}"
 }
 
+# Returns the cursor Y position in copy mode.
+get_tmux_cursor_row() {
+    tmux display-message -p "#{copy_cursor_y}"
+}
+
+# Returns a single integer representing the scroll position in copy mode.
+get_tmux_scroll_pos() {
+    tmux display-message -p "#{scroll_position}"
+}
+
 # Enters the copy mode in the current tmux pane.
 enter_tmux_copy_mode() {
     tmux copy-mode
@@ -49,9 +59,20 @@ enter_tmux_copy_mode() {
 
 # Moves the cursor to the beginning of the previous prompt. It assumes that
 # the shell emits prompts that starts with the FTCS_PROMPT sequence and
-# that the current tmux pane is in copy mode.
+# that the current tmux pane is in copy mode. If there is no shell prompt in
+# the current buffer, moves to the beginning of the buffer instead.
 jump_to_previous_prompt() {
+    start_offset="$( get_tmux_scroll_pos )"
+    start_row="$( get_tmux_cursor_row )"
+
     tmux send-keys -X previous-prompt
+
+    end_offset="$( get_tmux_scroll_pos )"
+    end_row="$( get_tmux_cursor_row )"
+
+    if (( start_offset == end_offset )) && (( start_row == end_row )); then
+        tmux send-keys -X history-top
+    fi
 }
 
 # Selects file paths between the current position and the end of the buffer,
