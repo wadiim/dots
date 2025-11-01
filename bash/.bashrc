@@ -42,7 +42,23 @@ if type fzf &> /dev/null; then
         fi
     fi
     eval "$(fzf --bash)"
-    export FZF_DEFAULT_OPTS='--color=border:white'
+
+    dirs_to_skip=(
+        '.cache'
+        '.config/chromium'
+        '.git'
+        '.local/share'
+        '.local/state'
+        '.mozilla'
+        '.mypy_cache'
+        '.venv'
+        'node_modules'
+    )
+    fzf_args=(
+        '--color=border:white'
+        "--walker-skip="$(IFS=,; echo "${dirs_to_skip[*]}")""
+    )
+    export FZF_DEFAULT_OPTS="${fzf_args[@]}"
 fi
 
 # vim:ts=4:sts=4:sw=4:et:
