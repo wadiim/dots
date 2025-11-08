@@ -16,6 +16,7 @@ path_body="($fd_name/){1,}(/$non_num_fd_name)+(/$fd_name){0,}|\
 
 ext="\.[[:alnum:]$common_chars]+"
 line_no='(:[0-9]+)'
+line_no_or_space="(:[[:space:]]|$line_no)"
 loc="($line_no$line_no?)"
 path_end='($|[[:space:]"/])'
 
@@ -25,9 +26,9 @@ non_prefixed_lc_rel_path="($fd_name(/$fd_name)+$loc$path_end?)"
 non_prefixed_non_lc_rel_path_with_ext="($fd_name(/$fd_name)+$ext$path_end)"
 non_prefixed_non_lc_rel_path_without_ext="($path_body$path_end)"
 
-# Matches `rg --vimgrep` style LC paths, consisting only of a filename with
-# extension. It requires the column number, unlike other matchers.
-non_prefixed_lc_basename_with_ext="(^($fd_char)+$ext$line_no$line_no)"
+# Matches `rg --vimgrep` and `mypy` style LC paths. It requires the file names
+# to have an extension.
+non_prefixed_lc_basename_with_ext="(^($fd_char)+$ext$line_no$line_no_or_space)"
 
 matcher="($start_delim(\
 $prefixed_path|\
