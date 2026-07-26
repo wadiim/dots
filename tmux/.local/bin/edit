@@ -138,7 +138,15 @@ if is_tmux_running; then
         [[ "$editor" == *vi* ]] && cmd="drop" || cmd="open"
         tmux_exit_copy_mode "$pane_id"
         tmux_send_keys "$pane_id" "C-c" "C-c"
-        tmux_send_keys "$pane_id" ":cd $( get_tmux_cwd )" "Enter"
+
+        # Convert relative paths to their absolute equivalents.
+        for (( i=0; i < "${#filepaths[@]}"; i+=1 )); do
+            if is_path_absolute "${filepaths[$i]}"; then
+                continue
+            fi
+            filepaths["$i"]="$( get_tmux_cwd )/${filepaths[$i]}"
+        done
+
         tmux_send_keys "$pane_id" ":$cmd " \
             "${filepaths[@]} | norm ${row}G0${col}l1h" "Enter"
         tmux_select_pane "$pane_id"
