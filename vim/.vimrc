@@ -137,6 +137,7 @@ if executable("fzf")
     let g:fzf_vim = {}
     let g:fzf_vim.preview_window = []
     let g:fzf_layout = { 'down': '30%' }
+    let g:fzf_vim.options = '--no-footer'
 
     if executable("rg")
         nnoremap <leader>fr :RG!<CR>
